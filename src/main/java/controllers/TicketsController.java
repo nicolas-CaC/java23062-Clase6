@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,17 +27,31 @@ public class TicketsController extends HttpServlet {
             HttpServletResponse res) 
             throws ServletException, IOException {
 
-        String tickets = ticketsServices.getTickets();
-        enviar(res, tickets);
+        try {
+            String tickets = ticketsServices.getTickets();
+            enviar(res, tickets);
+        } 
+        catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
         
     }
 
+    
     @Override
     protected void doPost(
             HttpServletRequest req, 
             HttpServletResponse res) 
             throws ServletException, IOException {
         
+        try {
+            String body = bodyToString(req.getInputStream());
+            String result = ticketsServices.postTickets(body);
+//            enviar(res, result);
+        } 
+        catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
     }
 
     @Override

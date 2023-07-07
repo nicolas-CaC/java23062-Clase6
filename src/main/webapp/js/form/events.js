@@ -1,11 +1,27 @@
 // EVENTS
 
+// Resets
+
 const resetCategories = () => {
     total = null
     selected = null
     eventsAssignmentAll()
     totalTag.innerText = totalText
 }
+
+const resetForm = (e) => {
+
+    e.preventDefault()
+
+    for (let input of inputs)
+        input.value = ''
+
+    select.value = 'none'
+
+    resetCategories()
+}
+
+// Setters
 
 const setCategory = (e) => {
 
@@ -17,7 +33,7 @@ const setCategory = (e) => {
     }
 
     category = option
-    const index = categories[category].value
+    const index = categories[option].value
     const container = cardsContainer[index]
 
     selected = index
@@ -41,23 +57,22 @@ const setTicket = (e) => {
     totalPrice()
 }
 
-// EVENTS: BUTTONS
+// Submit
 
-const reset = (e) => {
+const adapterForm = ({ firstname, lastname, email, tickets, category }) => {
 
-    e.preventDefault()
+    const data = {
+        nombre: firstname.value,
+        apellido: lastname.value,
+        correo: email.value,
+        cantidad: tickets.value,
+        categoria: category.value
+    }
 
-    for (let input of inputs)
-        input.value = ''
-
-    select.value = 'none'
-
-    resetCategories()
+    return data
 }
 
-const submit = (e) => {
-
-    e.preventDefault()
+const verifyForm = (form) => {
 
     const { firstname, lastname, email, tickets, category } = form
 
@@ -70,10 +85,36 @@ const submit = (e) => {
     }
 
     const values = Object.values(verified)
-    const submitAccepted = values.every(value => value)
+    const accepted = values.every(value => value)
+
+    return accepted
+}
+
+const submitForm = async (form) => {
+
+    const data = adapterForm(form)
+
+    const config = {
+        method: 'POST',
+        body: JSON.stringify(data)
+    }
+
+    console.log(config.body)
+
+    let confirm
+    confirm = await fetch('/api/tickets', config)
+    confirm = await confirm.json()
+    console.log(confirm)
+}
+
+const submit = (e) => {
+
+    e.preventDefault()
+
+    const submitAccepted = verifyForm(form)
 
     submitAccepted
-        ? location.href = '/exito.html'
+        ? submitForm(form)
         : alert('Debes completar todos los campos correctamente')
 
 
@@ -87,4 +128,4 @@ form.tickets.addEventListener('change', setTicket)
 form.tickets.addEventListener('keyup', setTicket)
 
 form.addEventListener('submit', submit)
-resetBtn.addEventListener('click', reset)
+resetBtn.addEventListener('click', resetForm)
