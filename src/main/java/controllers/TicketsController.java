@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import services.TicketsServices;
 
 
-@WebServlet(name = "TicketsController", urlPatterns = {"/api/tickets"})
+@WebServlet(name = "TicketsController", urlPatterns = {"/api/tickets", "/api/tickets/*"})
 public class TicketsController extends HttpServlet {
 
     private final TicketsServices ticketsServices = new TicketsServices();
@@ -47,26 +47,43 @@ public class TicketsController extends HttpServlet {
         try {
             String body = bodyToString(req.getInputStream());
             String result = ticketsServices.postTickets(body);
-//            enviar(res, result);
+            enviar(res, result);
         } 
         catch (SQLException ex) {
             System.out.println(ex.toString());
         }
     }
 
+    
     @Override
     protected void doPut(
             HttpServletRequest req, 
             HttpServletResponse res) 
             throws ServletException, IOException {
-       
+        
+        try {
+            String body = bodyToString(req.getInputStream());
+            String result = ticketsServices.modifyticket(body);
+            enviar(res, result);
+        } catch (SQLException ex) {
+            Logger.getLogger(TicketsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected void doDelete(
             HttpServletRequest req, 
-            HttpServletResponse resp) 
+            HttpServletResponse res) 
             throws ServletException, IOException {
+        
+        try {
+            String path = req.getPathInfo();
+            String result = ticketsServices.deleteTicket(path);
+            enviar(res, result);
+        } 
+        catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
     }
     
     

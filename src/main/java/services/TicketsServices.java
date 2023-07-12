@@ -29,4 +29,17 @@ public class TicketsServices {
         return GSON.toJson(result);
     }
 
+    public String modifyticket(String ticket) throws SQLException{
+        Ticket newTicket = GSON.fromJson(ticket, Ticket.class);
+        boolean error = DAO.modifyTicket(newTicket);
+        Result result = new Result(error);
+        return GSON.toJson(result);
+    }
+    
+    public String deleteTicket(String path) throws SQLException{
+        int id = Integer.parseInt(path.substring(1));
+        int error = DAO.deleteTicket(id);
+        Result result = new Result(error == 0);
+        return GSON.toJson(result);
+    }
 }

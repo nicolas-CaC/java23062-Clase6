@@ -56,10 +56,35 @@ public class TicketsDaoMysql {
         catch(SQLException e){
             System.out.println(e.toString());
             return true;
-        }
-        
+        }   
     } 
     
+    public Boolean modifyTicket(Ticket ticket) throws SQLException{
+        
+        try{
+            ps = connect.prepareStatement("UPDATE tickets SET nombre=?, apellido=?, correo=?, cantidad=?, categoria=? WHERE id=?;");
+            ps.setString(1, ticket.getNombre());
+            ps.setString(2, ticket.getApellido());
+            ps.setString(3, ticket.getCorreo());
+            ps.setInt(4, ticket.getCantidad());
+            ps.setInt(5, ticket.getCategoria().getCodigo());
+            ps.setInt(6, ticket.getId());
+            ps.execute();
+            return false;
+        }
+        catch(SQLException e){
+            System.out.println(e.toString());
+            return true;
+        }
+        
+        
+    }
+    
+    public int deleteTicket(int id) throws SQLException{
+        ps = connect.prepareStatement("DELETE FROM tickets WHERE id=?");
+        ps.setInt(1, id);
+        return ps.executeUpdate();
+    }
     
 //    private Ticket prepareTicket(ResultSet rs){
 //        
