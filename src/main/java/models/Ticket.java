@@ -18,6 +18,15 @@ public class Ticket {
         this.correo = correo;
         this.categoria = setCategoria(categoria); 
     }
+
+    public Ticket(String nombre, String apellido, String correo, int cantidad, String categoria){
+        this.id = 0;
+        this.cantidad = cantidad;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.categoria = setCategoria(categoria); 
+    }
     
     public Ticket(int id, String nombre, String apellido, String correo, int cantidad, Categoria categoria) {
         this.id = id;

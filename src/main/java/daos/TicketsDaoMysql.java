@@ -17,6 +17,19 @@ public class TicketsDaoMysql {
     PreparedStatement ps;
     ResultSet rs;
     
+    // Static
+    
+    public static TicketsDaoMysql instance = null;
+    
+    public static TicketsDaoMysql getInstance(){
+        if(instance == null)
+            instance = new TicketsDaoMysql();
+        return instance;
+    }
+    
+    
+    
+    // Publicos
     
     public LinkedList getTickets() throws SQLException{
         

@@ -66,7 +66,7 @@ public class TicketsController extends HttpServlet {
             String result = ticketsServices.modifyticket(body);
             enviar(res, result);
         } catch (SQLException ex) {
-            Logger.getLogger(TicketsController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
         }
     }
 

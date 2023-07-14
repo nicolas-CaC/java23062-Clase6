@@ -10,7 +10,7 @@ import models.Ticket;
 public class TicketsServices {
     
     private final Gson GSON = new Gson();
-    private final TicketsDaoMysql DAO = new TicketsDaoMysql();
+    private final TicketsDaoMysql DAO = TicketsDaoMysql.getInstance();
     
     public String getTickets() throws SQLException{
         
@@ -37,7 +37,12 @@ public class TicketsServices {
     }
     
     public String deleteTicket(String path) throws SQLException{
-        int id = Integer.parseInt(path.substring(1));
+          
+        int id;
+        if(path.contains("/"))
+            id = Integer.parseInt(path.substring(1));
+        else
+            id = Integer.parseInt(path);
         int error = DAO.deleteTicket(id);
         Result result = new Result(error == 0);
         return GSON.toJson(result);
